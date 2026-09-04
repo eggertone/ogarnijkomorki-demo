@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ogarnij Komórki – Asystent AI</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- Placeholder avatar z inicjałami. Podmień na prawdziwe zdjęcie, np.:
+           <img class="avatar" src="bartek.jpg" alt="Bartłomiej Samel" /> -->
+      <div class="avatar" aria-hidden="true">BS</div>
+      <div class="header-text">
+        <div class="header-name">Bartłomiej Samel</div>
+        <div class="header-role">Twój trener Excela 🤓 — Ogarnij Komórki</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <span class="eyebrow">📊 Szybki dobór kursu</span>
+      <h1>Znajdźmy kurs Excela dopasowany do Ciebie</h1>
+      <p class="hero-subtitle">Odpowiedz na kilka pytań, a polecę Ci najlepszą opcję z oferty Bartłomieja Samela (Ogarnij Komórki).</p>
+    </section>
+
+    <section class="chat-card">
+      <div class="chat-card-header">
+        <span class="status-dot"></span>
+        <span>Asystent AI Ogarnij Komórki</span>
+        <button id="resetBtn" class="reset-btn" type="button">Nowa rozmowa</button>
+      </div>
+
+      <div id="chat" class="chat"></div>
+
+      <form id="composer" class="composer">
+        <input
+          id="messageInput"
+          type="text"
+          placeholder="Napisz, na jakim jesteś dziś poziomie w Excelu..."
+          autocomplete="off"
+        />
+        <button type="submit">Wyślij</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    Demo asystenta AI, Michał Eggert x Ogarnij Komórki
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
