@@ -9,7 +9,13 @@ const DEMO_SECRET = "OGARNIJKOMORKI-DEMO-2026";
 const WELCOME_MESSAGE =
   "Cześć! Powiedz, na jakim poziomie jesteś dziś z Excelem: dopiero zaczynasz, ogarniasz podstawy, czy szukasz czegoś bardziej zaawansowanego?";
 
+function getGrupaFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("grupa") || "demo-publiczne";
+}
+
 let sessionId = "demo-ogarnijkomorki";
+const grupa = getGrupaFromUrl();
 
 const chatEl = document.getElementById("chat");
 const formEl = document.getElementById("composer");
@@ -46,7 +52,7 @@ async function sendMessage(text) {
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, message: text, secret: DEMO_SECRET })
+      body: JSON.stringify({ sessionId, message: text, secret: DEMO_SECRET, grupa })
     });
 
     if (!response.ok) {
