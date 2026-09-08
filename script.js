@@ -16,18 +16,40 @@ function getGrupaFromUrl() {
 
 let sessionId = "demo-ogarnijkomorki";
 const grupa = getGrupaFromUrl();
+let historiaRozmowy = [];
 
 const chatEl = document.getElementById("chat");
 const formEl = document.getElementById("composer");
 const inputEl = document.getElementById("messageInput");
 const resetBtn = document.getElementById("resetBtn");
 
-function addMessage(text, sender) {
+function formatCzas() {
+  const teraz = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return pad(teraz.getHours()) + ":" + pad(teraz.getMinutes()) + ":" + pad(teraz.getSeconds());
+}
+
+function formatujHistorieRozmowy() {
+  return historiaRozmowy
+    .map((wpis) => "[" + wpis.czas + "] " + (wpis.rola === "bot" ? "BOT" : "UŻYTKOWNIK") + ": " + wpis.tekst)
+    .join("\n");
+}
+
+function addMessage(text, sender, zapiszWHistorii = true) {
   const bubble = document.createElement("div");
   bubble.className = "bubble " + sender;
   bubble.textContent = text;
   chatEl.appendChild(bubble);
   chatEl.scrollTop = chatEl.scrollHeight;
+
+  if (zapiszWHistorii) {
+    historiaRozmowy.push({
+      rola: sender === "user" ? "uzytkownik" : "bot",
+      tekst: text,
+      czas: formatCzas()
+    });
+  }
+
   return bubble;
 }
 
@@ -52,7 +74,13 @@ async function sendMessage(text) {
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, message: text, secret: DEMO_SECRET, grupa })
+      body: JSON.stringify({
+        sessionId,
+        message: text,
+        secret: DEMO_SECRET,
+        grupa,
+        historia_rozmowy: formatujHistorieRozmowy()
+      })
     });
 
     if (!response.ok) {
@@ -65,7 +93,7 @@ async function sendMessage(text) {
   } catch (err) {
     console.error("Błąd komunikacji z chatbotem:", err);
     typingBubble.remove();
-    addMessage("Nie udało się uzyskać odpowiedzi. Spróbuj ponownie.", "ai error");
+    addMessage("Nie udało się uzyskać odpowiedzi. Spróbuj ponownie.", "ai error", false);
   }
 }
 
@@ -79,6 +107,7 @@ formEl.addEventListener("submit", (event) => {
 
 resetBtn.addEventListener("click", () => {
   sessionId = "demo-" + Math.random().toString(36).slice(2, 10);
+  historiaRozmowy = [];
   chatEl.innerHTML = "";
   showWelcomeMessage();
 });
